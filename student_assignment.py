@@ -27,7 +27,27 @@ def generate_hw01():
         metadata={"hnsw:space": "cosine"},
         embedding_function=openai_ef
     )
-    
+
+    #print(collection.count())
+    data = pd.read_csv(csv_file)
+    for idx, row in data.iterrows():
+        metadata = {
+            "file_name": csv_file,
+            "name": row["Name"],
+            "type": row["Type"],
+            "address": row["Address"],
+            "tel": row["Tel"],
+            "city": row["City"],
+            "town": row["Town"],
+            "date": datetime.datetime.strptime(row["CreateDate"], '%Y-%m-%d').timestamp()
+        }
+        
+        collection.add(
+            ids=[str(row["ID"])],
+            metadatas = [metadata],
+            documents = [row["HostWords"]]
+        )
+
     return collection
     
 def generate_hw02(question, city, store_type, start_date, end_date):
