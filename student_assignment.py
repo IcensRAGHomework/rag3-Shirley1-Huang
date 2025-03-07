@@ -54,4 +54,4 @@ def demo(question):
     return collection
 
 
-#print(generate_hw01())
+print(generate_hw01())
