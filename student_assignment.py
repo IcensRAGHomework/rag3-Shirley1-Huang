@@ -115,7 +115,7 @@ def generate_hw03(question, store_name, new_store_name, city, store_type):
     
     #print(list(zip(result['metadatas'][0], result['distances'][0])))
     
-    names = list( metadata['new_store_nam2e'] if metadata.get('new_store_name') else metadata['name'] for metadata, distance in zip(result['metadatas'][0], result['distances'][0]) if distance < 0.2) 
+    names = list( metadata['new_store_name'] if metadata.get('new_store_name') else metadata['name'] for metadata, distance in zip(result['metadatas'][0], result['distances'][0]) if distance < 0.2) 
     #print(names)
     
     return names
