@@ -72,7 +72,53 @@ def generate_hw02(question, city, store_type, start_date, end_date):
     return names
     
 def generate_hw03(question, store_name, new_store_name, city, store_type):
-    pass
+    collection = generate_hw01()
+    query_result = collection.get(
+        where = {"name": store_name}
+    )
+    
+    #print(query_result['ids'][0])
+    #print(query_result['metadatas'][0])
+    #print(query_result['documents'][0])
+    
+    new_metadata = query_result["metadatas"][0]
+    new_metadata["new_store_name"] = new_store_name
+    
+    #print(new_metadata)
+    
+    collection.upsert(
+        ids = query_result['ids'][0],
+        metadatas = [new_metadata],
+        documents = query_result['documents'][0]
+    )
+    
+    
+    #query_result2 = collection.get(
+    #    where = {"name": store_name}
+    #)
+    
+    #print(query_result2['ids'][0])
+    #print(query_result2['metadatas'][0])
+    #print(query_result2['documents'][0])
+    
+    
+    
+    result = collection.query(
+        query_texts=[question],
+        where={"$and": [
+            {"city": {"$in": city}}, 
+            {"type": {"$in": store_type}}
+            ]},
+        include=["metadatas", "distances"],
+        n_results = 10,
+    )
+    
+    #print(list(zip(result['metadatas'][0], result['distances'][0])))
+    
+    names = list( metadata['new_store_name'] if metadata.get('new_store_name') else metadata['name'] for metadata, distance in zip(result['metadatas'][0], result['distances'][0]) if distance < 0.2) 
+    #print(names)
+    
+    return names
     
 def demo(question):
     chroma_client = chromadb.PersistentClient(path=dbpath)
