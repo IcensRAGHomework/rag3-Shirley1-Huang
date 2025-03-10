@@ -62,6 +62,7 @@ def generate_hw02(question, city, store_type, start_date, end_date):
             {"date": {"$lte": int(end_date.timestamp())}}
             ]},
         include=["metadatas", "distances"],
+        n_results = 10,
     )
     
     #print(list(zip(result['metadatas'][0], result['distances'][0])))
