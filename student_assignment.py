@@ -1,6 +1,7 @@
 import datetime
 import chromadb
 import traceback
+import pandas as pd
 
 from chromadb.utils import embedding_functions
 
@@ -10,6 +11,7 @@ gpt_emb_version = 'text-embedding-ada-002'
 gpt_emb_config = get_model_configuration(gpt_emb_version)
 
 dbpath = "./"
+csv_file = 'COA_OpenData.csv'
 
 def generate_hw01():
     chroma_client = chromadb.PersistentClient(path = dbpath)
